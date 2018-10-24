@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+
+<body>
+<br>
+<br>
+<br>
+<br>
+<div id="input">
+<form v-on:submit="addParam">
+	<input type="checkbox" v-model="param.name">名称<br>
+	<input type="checkbox" v-model="param.type">类型<br>
+	<input type="text" v-model="param.value">值<br>
+	<input type="checkbox" v-model="param.superName">上级名称<br>
+	<input type="submit" value="添加"></input>
+</form>
+<div>{{param}}</div>
+	<div v-for="par in params">
+		{{ par.name }}
+		{{ par.value }}
+		{{ par.type }}
+	</div>
+</div>
+	<button onclick="submitData()">提交</button>
+<ul id="example-1">
+  <li v-for="item in items">
+    {{ item.message }}
+  </li>
+</ul>
+</body>
+<script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+<script>
+var subData;
+	var example1 = new Vue({
+		  el: '#example-1',
+		  data: {
+		    items: [
+		      { message: 'Foo' },
+		      { message: 'Bar' }
+		    ]
+		  }
+		})
+	
+	var test = new Vue({
+		el:'#input',
+		data:{
+			param:{},
+			params:[
+				{
+					name:'1',
+					value:'2',
+					type:'3'
+				}
+			]
+		},
+		methods:{
+			addParam:function(e){
+				console.log('hello');
+				this.params.push({
+					name:this.param.name,
+					value:this.param.value,
+					type:this.param.type
+				})
+				console.log('成功');
+				subData=this.params;
+				console.log(this.params);
+				e.preventDefault();
+			},
+			submitData:function(e){
+				var subData2=this.params;
+				console.log(subData2);
+				e.preventDefault();
+				
+			}
+		}
+	});
+	function submitData (){
+		console.log(test.params);
+		$.ajax({
+            type: "GET",
+            url: "www.baidu.com",
+            data: subData,
+            dataType: "json"
+        });
+	}
+</script>
+</html>

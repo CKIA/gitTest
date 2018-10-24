@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>布局转换</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<style>
+/* Hide un-compiled mustache bindings
+ until the Vue instance is ready */
+[v-cloak] {
+	display: none;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font: 15px/1.3 'Open Sans', sans-serif;
+	color: #5e5b64;
+	text-align: center;
+}
+
+a, a:visited {
+	outline: none;
+	color: #389dc1;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+section, footer, header, aside, nav {
+	display: block;
+}
+
+/*-------------------------
+  导航栏样式
+ --------------------------*/
+.bar {
+	background-color: #03c03c;
+	background-image: -webkit-linear-gradient(top, #03c03c, #00ed47);
+	background-image: -moz-linear-gradient(top, #03c03c, #00ed47);
+	background-image: linear-gradient(top, #03c03c, #00ed47);
+	box-shadow: 0 1px 1px #ccc;
+	border-radius: 5px;
+	width: 580px;
+	padding: 10px;
+	margin: 45px auto 25px;
+	position: relative;
+	text-align: right;
+	line-height: 1;
+}
+
+.bar a {
+	background: #ffe055 center center no-repeat;
+	width: 35px;
+	height: 35px;
+	display: inline-block;
+	text-decoration: none !important;
+	margin-right: 5px;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.bar a.active {
+	background-color: orange;
+}
+
+.bar a.list-icon {
+	background-image:
+		url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyBpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBXaW5kb3dzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkYzNkFCQ0ZBMTBCRTExRTM5NDk4RDFEM0E5RkQ1NEZCIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkYzNkFCQ0ZCMTBCRTExRTM5NDk4RDFEM0E5RkQ1NEZCIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6RjM2QUJDRjgxMEJFMTFFMzk0OThEMUQzQTlGRDU0RkIiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6RjM2QUJDRjkxMEJFMTFFMzk0OThEMUQzQTlGRDU0RkIiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz7h1bLqAAAAWUlEQVR42mL8////BwYGBn4GCACxBRlIAIxAA/4jaXoPEkMyjJ+A/g9MDJQBRhYg8RFqMwg8RJIUINYLFDmBUi+ADQAF1n8ofk9yIAy6WPg4GgtDMRYAAgwAdLYwLAoIwPgAAAAASUVORK5CYII=);
+}
+
+.bar a.grid-icon {
+	background-image:
+		url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyBpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBXaW5kb3dzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjBEQkMyQzE0MTBCRjExRTNBMDlGRTYyOTlBNDdCN0I4IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjBEQkMyQzE1MTBCRjExRTNBMDlGRTYyOTlBNDdCN0I4Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MERCQzJDMTIxMEJGMTFFM0EwOUZFNjI5OUE0N0I3QjgiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MERCQzJDMTMxMEJGMTFFM0EwOUZFNjI5OUE0N0I3QjgiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4MjPshAAAAXklEQVR42mL4////h/8I8B6IGaCYKHFGEMnAwCDIAAHvgZgRyiZKnImBQsACxB+hNoDAQyQ5osQZIT4gH1DsBZABH6AB8x/JaQzEig++WPiII7Rxio/GwmCIBYAAAwAwVIzMp1R0aQAAAABJRU5ErkJggg==);
+}
+
+.bar input {
+	background: #fff no-repeat 13px 13px;
+	border: none;
+	width: 100%;
+	line-height: 19px;
+	padding: 11px 0;
+	border-radius: 2px;
+	box-shadow: 0 2px 8px #c4c4c4 inset;
+	text-align: left;
+	font-size: 14px;
+	font-family: inherit;
+	color: #738289;
+	font-weight: bold;
+	outline: none;
+	text-indent: 40px;
+}
+
+/*-------------------------
+  列表布局
+ --------------------------*/
+ul.list {
+	list-style: none;
+	width: 500px;
+	margin: 0 auto;
+	text-align: left;
+}
+
+ul.list li {
+	border-bottom: 1px solid #ddd;
+	padding: 10px;
+	overflow: hidden;
+	cursor: pointer;
+}
+
+ul.list li img {
+	width: 120px;
+	height: 120px;
+	float: left;
+	border: none;
+}
+
+ul.list li p {
+	margin-left: 135px;
+	font-weight: bold;
+	color: #6e7a7f;
+}
+
+/*-------------------------
+  网格布局
+ --------------------------*/
+ul.grid {
+	list-style: none;
+	width: 570px;
+	margin: 0 auto;
+	text-align: left;
+}
+
+ul.grid li {
+	padding: 1px;
+	float: left;
+	cursor: pointer;
+	border: 1px solid #e8e8e8;
+	box-sizing: border-box;
+}
+
+ul.grid li img {
+	width: 280px;
+	height: 280px;
+	object-fit: cover;
+	display: block;
+	border: none;
+	padding: 10px;
+	box-sizing: border-box;
+}
+</style>
+</head>
+<body>
+
+		<table class="table table-hover table-bordered">
+			<thead>
+				<tr>
+					<th width="10%">id</th>
+					<th width="30%">name</th>
+					<th width="40%">content</th>
+					<th width="20%">remark</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="data in tableList">
+					<td v-text="data.num"></td>
+					<td v-text="data.author"></td>
+					<td v-text="data.contents"></td>
+					<td v-text="data.remark"></td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="4">
+						<div class="pull-left">
+							<button class="btn btn-default" v-on:click="refresh">刷新</button>
+						</div>
+						<div class="pull-right">
+							<boot-page :async="false" :data="lists" :lens="lenArr"
+								:page-len="pageLen" :param="param"></boot-page>
+						</div>
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.5/vue.min.js"></script>
+	<script type="text/javascript">
+ <script>
+ import bootPage from './components/BootPage.vue'
+ 
+ export default {
+  data () {
+  return {
+   lenArr: [10, 50, 100], // 每页显示长度设置
+   pageLen: 5, // 可显示的分页数
+   lists: [
+   {num: 1, author: 'luozh', contents: 'BootPage是一款支持静态数据和服务器数据的表格分页组件', remark: 'dsds'},
+   {num: 2, author: 'luozh', contents: '支持调整每页显示行数和页码显示个数，样式基于bootstrap', remark: 'dsds'},
+   {num: 3, author: 'luozh', contents: '<boot-page>标签中async指是否从服务器端获取数据，false为否', remark: 'dsds'},
+   {num: 4, author: 'luozh', contents: 'data为静态的表格数据数组；', remark: 'dsds'},
+   {num: 5, author: 'luozh', contents: 'lens为每页显示行数的数组', remark: 'dsds'},
+   {num: 6, author: 'luozh', contents: 'page-len为可显示的页码数', remark: 'dsds'},
+   {num: 7, author: 'luozh', contents: '服务器回传参数为{data:[], page_num: 6}, 其中data为表格数据，page_num为总页数', remark: 'dsds'},
+   {num: 8, author: 'luozh', contents: '可以调用this.$refs.page.refresh()刷新表格数据', remark: 'dsds'}
+   ], // 表格原始数据，使用服务器数据时无需使用
+   tableList: [] // 分页组件传回的分页后数据
+  }
+  },
+  components: {
+  bootPage
+  },
+  events: {
+ 
+  // 分页组件传回的表格数据
+  'data' (data) {
+   this.tableList = data
+  }
+  }
+ }
+</script>
+</body>
+</html>

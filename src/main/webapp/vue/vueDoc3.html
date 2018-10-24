@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        html,body{
+            margin: 0;padding: 0;
+        }
+        .mdtransition-enter-active,
+        .mdtransition-leave-active {
+            transition: all 0.8s;
+        }
+
+        .mdtransition-enter,
+        .mdtransition-leave-active {
+            opacity: 0;
+        }
+
+    </style>
+</head>
+<body style="align:center;">
+    <div id="example" style="align:center;">
+        <modal ref="modal" style="position:absolute;" word="确认或取消"></modal>
+        <button @click="showDialog">show  del !</button>
+    </div>
+    <script src="https://unpkg.com/vue@2.2.4/dist/vue.js"></script>
+    <script>
+        Vue.component('modal', {
+            template: `
+            <transition appear
+            name="mdtransition"
+            >
+                <div style="
+                height:100vh;
+                width:100vw;
+                background-color:rgba(0,0,0,0.3);
+                display: flex;
+                justify-content:center;
+                align-items:center;
+                flex-direction: column;
+                "
+                @click="hide"
+                v-if="isShow"
+                >
+                    <div style="
+                    background-color:#fff;
+                    border-radius:3px;
+                    padding:60px 100px;
+                    "
+                    >
+                        <p align="center">{{ word }}</p>
+                        <div style="
+                        display: flex;
+                        float:center;
+                        justify-content:Space-around;
+                        ">
+                            <button @click="yes" style="background-color:#347AB7;border-color:#204d74;height:45px;width:80px;border-radius:5px;margin-right:30px;"><font color="green">确定</font></button>
+                            <button @click="no" style="background-color:#347AB7;border-color:#204d74;height:45px;width:80px;border-radius:5px;"><font color="green">取消</font></button>
+                        </div>
+                    </div>
+                </div>
+            </transition>
+            `,
+            props:['word'],
+            data:function(){
+                return {
+                    isShow:false,
+                    yescb:'',
+                    nocb:''
+                }
+            },
+            methods:{
+                hide:function(){
+                    this.isShow = false;
+                },
+                show:function(yescb,nocb){
+                    this.isShow = true;
+                    this.yescb = yescb;
+                    this.nocb = nocb;
+                },
+                yes:function(){
+                    this.yescb();
+                },
+                no:function(){
+                    this.nocb();
+                }
+            }
+        })
+
+        var vm = new Vue({
+            el: '#example',
+            methods:{
+                showDialog:function(){
+                    this.$refs.modal.show(function(){
+                        console.log('yes');
+                    },function(){
+                        console.log('no');
+                    });
+                }
+            }
+        })
+    </script>
+</body>
+</html>

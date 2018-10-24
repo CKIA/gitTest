@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<body>
+	<h3>hello</h3>
+	<button onclick="boo()">test</button>
+	<div id="test" v-for="user in users">
+		<h3>{{user.name}}</h3>
+		<input value="{{user.sex}}" name="{{user.id}}">性别</input>
+		<input value="{{user.id}}">学号</input>
+	</div>
+</body>
+
+<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+<script src="http://static.runoob.com/assets/vue/1.0.11/vue.min.js"></script>
+
+<script>
+	
+	var da=new Array();
+	$.ajax({
+		type:'GET',
+		async:false,
+	    url: 'http://localhost:8088/test/get',
+	    dataType: "json",
+	    success: function (data) {
+	    	da=data.data;
+	    }
+	});
+	console.log(da);
+	new Vue({
+		el:"#test",
+		data:{
+			users:da
+		}
+	});
+</script>
+</html>
